@@ -1,0 +1,45 @@
+<!-- backend/templates/home.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cryptocurrency Prices</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> <!-- Include jQuery library -->
+</head>
+<body>
+    <h1>Cryptocurrency Prices</h1>
+    <ul>
+        <li>Bitcoin: ${{ currency_prices.Bitcoin }}</li>
+        <li>Ethereum: ${{ currency_prices.Ethereum }}</li>
+        <li>Litecoin: ${{ currency_prices.Litecoin }}</li>
+        <li>USDT: ${{ currency_prices.USDT }}</li>
+    </ul>
+
+    <script>
+        // Function to update prices from the server
+        function updatePrices() {
+            $.ajax({
+                url: '/api/prices/', // URL to fetch prices from
+                method: 'GET',
+                success: function(data) {
+                    // Update the placeholders with the new prices
+                    $('#bitcoin_price').text('$' + (data.bitcoin || 'N/A'));
+                    $('#ethereum_price').text('$' + (data.ethereum || 'N/A'));
+                    $('#litecoin_price').text('$' + (data.litecoin || 'N/A'));
+                    $('#usdt_price').text('$' + (data.usdt || 'N/A'));
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error fetching prices:', error);
+                }
+            });
+        }
+
+        // Call the updatePrices function initially
+        updatePrices();
+
+        // Set interval to call updatePrices function every 5 seconds (adjust as needed)
+        setInterval(updatePrices, 5000);
+    </script>
+</body>
+</html>
